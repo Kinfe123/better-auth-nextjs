@@ -159,7 +159,7 @@ export function LoginForm({
               <svg
                 className="w-5 h-5"
                 viewBox="0 0 48 48"
-                fill="none"
+                fill-rule="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g clip-path="url(#clip0_17_40)">
