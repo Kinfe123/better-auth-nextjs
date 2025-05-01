@@ -1,6 +1,4 @@
 "use client";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,32 +8,49 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-import { useRouter } from "next/navigation";
-
 import { authClient } from "@/lib/auth-client";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { cn } from "@/lib/utils";
+import { signUpSchema } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Terminal } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
+import { z } from "zod";
+import { Alert, AlertDescription } from "../ui/alert";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { PasswordInput } from "../ui/password-input";
+import { IconLoader } from "@tabler/icons-react";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-
-  const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: any) {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      fullname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof signUpSchema>) {
+    const { email, password, confirmPassword, fullname } = values;
     const { data, error } = await authClient.signUp.email(
       {
         /**
@@ -67,7 +82,7 @@ export function SignupForm({
           setError(ctx.error.message);
           setLoading(false);
         },
-      },
+      }
     );
   }
 
@@ -85,72 +100,76 @@ export function SignupForm({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="email">Full Name</Label>
-                <Input
-                  onChange={(e) => setFullname(e.target.value)}
-                  value={fullname}
-                  id="name"
-                  type="text"
-                  placeholder="Achour Meguenni"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  id="email"
-                  type="email"
-                  placeholder="me@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <PasswordInput
-                  onChange={(e: any) => setPassword(e.target.value)}
-                  value={password}
-                  id="password"
-                  type="password"
-                  required
-                />
-              </div>
 
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Confirm Password</Label>
-                </div>
-                <PasswordInput
-                  onChange={(e: any) => setConfirmPassword(e.target.value)}
-                  value={confirmPassword}
-                  id="password"
-                  type="password"
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Button disabled={loading} type="submit" className="w-full">
-                  {loading ? (
-                    <IconLoader className="animate-spin" stroke={2} />
-                  ) : (
-                    "Sign Up"
-                  )}
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <a href="/login" className="underline underline-offset-4">
-                Login
-              </a>
-            </div>
-          </form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="fullname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Achour Meguenni" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="me@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button disabled={loading} type="submit" className="w-full">
+                {loading ? (
+                  <IconLoader className="animate-spin" stroke={2} />
+                ) : (
+                  "Sign Up"
+                )}
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <a href="/login" className="underline underline-offset-4">
+              Login
+            </a>
+          </div>
           <hr className="w-full h-px border-input my-4" />
           <div className="flex my-3 gap-2">
             <button

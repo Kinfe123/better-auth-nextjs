@@ -1,7 +1,4 @@
 "use client";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,18 +7,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Terminal } from "lucide-react";
+import { Alert, AlertDescription } from "../ui/alert";
 
-import { IconLoader } from "@tabler/icons-react";
 import { toast } from "sonner";
-import { PasswordInput } from "../ui/password-input";
+import { loginSchema } from "@/lib/validation";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { useForm } from "react-hook-form";
+import { PasswordInput } from "../ui/password-input";
+import { Button } from "../ui/button";
+import { IconLoader } from "@tabler/icons-react";
 export function LoginForm({
   className,
   ...props
@@ -34,9 +46,16 @@ export function LoginForm({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: any) {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    const { email, password } = values;
     const { data, error } = await authClient.signIn.email(
       {
         /**
@@ -67,7 +86,7 @@ export function LoginForm({
           setError(ctx.error.message);
           setLoading(false);
         },
-      },
+      }
     );
   }
 
@@ -87,54 +106,59 @@ export function LoginForm({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="/forget-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <PasswordInput
-                  onChange={(e: any) => setPassword(e.target.value)}
-                  value={password}
-                  id="password"
-                  type="password"
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Button disabled={loading} type="submit" className="w-full">
-                  {loading ? (
-                    <IconLoader className="animate-spin" stroke={2} />
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="/signup" className="underline underline-offset-4">
-                Sign up
-              </a>
-            </div>
-          </form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="m@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <span>Password</span>
+                      <a
+                        href="/forget-password"
+                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                      >
+                        Forgot your password?
+                      </a>
+                    </FormLabel>
+                    <FormControl>
+                      <PasswordInput placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button disabled={loading} type="submit" className="w-full">
+                {loading ? (
+                  <IconLoader className="animate-spin" stroke={2} />
+                ) : (
+                  "Login"
+                )}
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <a href="/signup" className="underline underline-offset-4">
+              Sign up
+            </a>
+          </div>
           <hr className="w-full h-px border-input my-4" />
           <div className="flex my-3 gap-2">
             <button
@@ -159,7 +183,8 @@ export function LoginForm({
               <svg
                 className="w-5 h-5"
                 viewBox="0 0 48 48"
-                fill-rule="none"
+                fill="none"
+                fillRule="evenodd"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g clipPath="url(#clip0_17_40)">
@@ -243,10 +268,10 @@ export function LoginForm({
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g clip-path="url(#clip0_910_21)">
+                <g clipPath="url(#clip0_910_21)">
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M24.0005 1C18.303 1.00296 12.7923 3.02092 8.45374 6.69305C4.11521 10.3652 1.23181 15.452 0.319089 21.044C-0.593628 26.636 0.523853 32.3684 3.47174 37.2164C6.41963 42.0643 11.0057 45.7115 16.4099 47.5059C17.6021 47.7272 18.0512 46.9883 18.0512 46.36C18.0512 45.7317 18.0273 43.91 18.0194 41.9184C11.3428 43.3608 9.93197 39.101 9.93197 39.101C8.84305 36.3349 7.26927 35.6078 7.26927 35.6078C5.09143 34.1299 7.43223 34.1576 7.43223 34.1576C9.84455 34.3275 11.1123 36.6194 11.1123 36.6194C13.2504 40.2667 16.7278 39.2116 18.0949 38.5952C18.3095 37.0501 18.9335 35.999 19.621 35.4023C14.2877 34.8017 8.68408 32.7548 8.68408 23.6108C8.65102 21.2394 9.53605 18.9461 11.156 17.2054C10.9096 16.6047 10.087 14.1785 11.3905 10.8829C11.3905 10.8829 13.4054 10.2427 17.9916 13.3289C21.9253 12.2592 26.0757 12.2592 30.0095 13.3289C34.5917 10.2427 36.6026 10.8829 36.6026 10.8829C37.9101 14.1706 37.0875 16.5968 36.8411 17.2054C38.4662 18.9464 39.353 21.2437 39.317 23.6187C39.317 32.7824 33.7015 34.8017 28.3602 35.3905C29.2186 36.1334 29.9856 37.5836 29.9856 39.8122C29.9856 43.0051 29.9578 45.5736 29.9578 46.36C29.9578 46.9962 30.391 47.7391 31.6071 47.5059C37.0119 45.7113 41.5984 42.0634 44.5462 37.2147C47.4941 32.3659 48.611 26.6326 47.6972 21.0401C46.7835 15.4476 43.8986 10.3607 39.5587 6.68921C35.2187 3.01771 29.7067 1.00108 24.0085 1H24.0005Z"
                     fill="currentColor"
                   />
