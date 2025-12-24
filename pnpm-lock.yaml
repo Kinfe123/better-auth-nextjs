@@ -114,8 +114,8 @@ importers:
         specifier: ^1.2.4
         version: 1.2.5(typescript@5.8.2)
       better-auth-studio:
-        specifier: 1.0.79-beta.7
-        version: 1.0.79-beta.7(@babel/core@7.28.5)(@types/react@19.1.0)(kysely@0.28.9)(next@15.3.8(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 1.0.79-beta.8
+        version: 1.0.79-beta.8(@babel/core@7.28.5)(@types/react@19.1.0)(kysely@0.28.9)(next@15.3.8(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1621,8 +1621,8 @@ packages:
     resolution: {integrity: sha512-Sg0xJUNDU1sJNGdfGWhVHX0kkZ+HWcvmVymJbj6NSgZZmW/8S9Y2HQ5euytnIgakgxN6papOAWiwDo1ctFDcoQ==}
     hasBin: true
 
-  better-auth-studio@1.0.79-beta.7:
-    resolution: {integrity: sha512-9+fF6SJhPCnz2/YTfoMToQxYXhWRtEfoRZBYQwAFLy5trNdv0Z2YQ6Srx3a0gFABpiHle6+efNS31DqZdjQzug==}
+  better-auth-studio@1.0.79-beta.8:
+    resolution: {integrity: sha512-ZGZUS3ict0Pgp8mOV4hfCZDu8583JJkzQQtKY8YyYFqoLBXQH/m0bEhGZW33pDj60IetxjIcPUhng/r80duH2w==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -4236,7 +4236,7 @@ snapshots:
 
   baseline-browser-mapping@2.9.11: {}
 
-  better-auth-studio@1.0.79-beta.7(@babel/core@7.28.5)(@types/react@19.1.0)(kysely@0.28.9)(next@15.3.8(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  better-auth-studio@1.0.79-beta.8(@babel/core@7.28.5)(@types/react@19.1.0)(kysely@0.28.9)(next@15.3.8(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       '@babel/preset-react': 7.28.5(@babel/core@7.28.5)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.28.5)
