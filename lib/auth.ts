@@ -30,7 +30,6 @@ export const auth = betterAuth({
     session: {
       create: {
         before: async (session) => {
-          console.log("session create", session);
         },
       },
     },
