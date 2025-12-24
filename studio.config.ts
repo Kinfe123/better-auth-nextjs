@@ -9,9 +9,9 @@ const config: StudioConfig = {
     theme: 'dark',
   },
   access: {
-    sessionDuration: 60 * 60 * 24 * 30, // 30 days
-    allowEmails: ['kinfetare83@gmail.com'],
     roles: ['admin'],
+    sessionDuration: 60 * 60 * 24 * 30, // 30 days
+    allowEmails: ['kinfetare83@gmail.com' , "admin@admin.com"],
   }
 };
 
