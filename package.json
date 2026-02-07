@@ -45,7 +45,7 @@
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-table": "^8.21.2",
     "better-auth": "^1.2.4",
-    "better-auth-studio": "1.1.2-beta.27",
+    "better-auth-studio": "1.1.2-beta.37",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
