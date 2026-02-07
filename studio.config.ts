@@ -15,7 +15,7 @@ const config: StudioConfig = {
   access: {
     roles: ['admin'],
     sessionDuration: 60 * 60 * 24 * 30, // 30 days
-    allowEmails: ['kinfetare83@gmail.com' , "admin@admin.com"],
+    allowEmails: ['kinfetare83@gmail.com' , "admin@user.com"],
   }
 };
 
