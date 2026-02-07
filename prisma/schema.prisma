@@ -23,7 +23,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
   preference    Preference[]
-  @@unique([email])
+  lastSeenAt    DateTime?
+ @@unique([email])
   @@map("user")
 }
 model Preference {

@@ -4,6 +4,10 @@ import { auth } from '@/lib/auth';
 const config: StudioConfig = {
   auth,
   basePath: '/api/studio',
+  lastSeenAt: {
+    enabled: true,
+    columnName: "lastSeenAt"
+  },
   metadata: {
     title: 'Admin Dashboard',
     theme: 'dark',
